@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>5-Star Review Generator | Web Development Services</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-6">
+
+<div class="max-w-3xl mx-auto">
+  <div class="bg-white rounded-2xl shadow-xl p-8">
+
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">
+        5-Star Review Generator
+      </h1>
+      <p class="text-gray-700 font-medium">
+        Web Development & Digital Solutions
+      </p>
+      <p class="text-sm text-gray-500 mt-1">
+        Websites • UI/UX • Performance Optimization
+      </p>
+    </div>
+
+    <!-- Stars -->
+    <div class="flex justify-center mb-6 text-yellow-400">
+      <i data-lucide="star" class="w-8 h-8 fill-yellow-400"></i>
+      <i data-lucide="star" class="w-8 h-8 fill-yellow-400"></i>
+      <i data-lucide="star" class="w-8 h-8 fill-yellow-400"></i>
+      <i data-lucide="star" class="w-8 h-8 fill-yellow-400"></i>
+      <i data-lucide="star" class="w-8 h-8 fill-yellow-400"></i>
+    </div>
+
+    <!-- Generate Button -->
+    <button
+      onclick="generateReview()"
+      class="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-3 shadow-lg"
+    >
+      <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+      Generate Random Review
+    </button>
+
+    <!-- Output -->
+    <div id="output" class="hidden mt-6 space-y-4">
+      <div class="bg-gray-50 border-2 border-gray-200 rounded-xl p-6">
+        <p id="reviewText" class="text-gray-800 leading-relaxed text-lg"></p>
+      </div>
+
+      <button
+        onclick="copyReview()"
+        class="w-full bg-gray-800 hover:bg-gray-900 text-white font-semibold py-3 px-6 rounded-xl flex items-center justify-center gap-2"
+      >
+        <i data-lucide="copy" class="w-5 h-5"></i>
+        <span id="copyBtnText">Copy Review</span>
+      </button>
+    </div>
+
+    <!-- Placeholder -->
+    <div id="placeholder" class="text-center py-12 text-gray-400">
+      <i data-lucide="code" class="w-16 h-16 mx-auto mb-4 opacity-30"></i>
+      <p>Click the button to generate a professional web development review</p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+lucide.createIcons();
+
+/* ===============================
+   👉 ADD YOUR CUSTOM REVIEWS HERE
+   =============================== */
+const myCustomReviews = [
+  // Paste your reviews here later
+];
+
+/* AUTO GENERATED DATA */
+const environmentComments = [
+  "The team was very professional and responsive.",
+  "Communication throughout the project was smooth.",
+  "They delivered the project on time.",
+  "Support and guidance were excellent.",
+  "Overall a very reliable service."
+];
+
+const devServices = [
+  "Website design was modern and user-friendly.",
+  "UI/UX was clean and intuitive.",
+  "The website performance is fast and optimized.",
+  "Responsive design works perfectly on all devices.",
+  "Code quality and structure were impressive."
+];
+
+const businessImpact = [
+  "My business presence improved significantly.",
+  "The website helped increase conversions.",
+  "Online visibility improved after launch.",
+  "Clients find the website easy to use.",
+  "It gave a professional image to my brand."
+];
+
+const hinglishEnv = [
+  "Team ka support kaafi accha tha.",
+  "Communication smooth raha project ke dauran.",
+  "Time par delivery mil gayi."
+];
+
+const hinglishDev = [
+  "Website ka design modern aur clean tha.",
+  "Mobile me bhi website perfectly kaam kar rahi hai.",
+  "Speed kaafi fast hai website ki."
+];
+
+const hinglishImpact = [
+  "Business online kaafi improve hua.",
+  "Clients ko website use karna easy lag raha hai.",
+  "Brand ka professional look improve hua."
+];
+
+/* MAIN FUNCTION */
+function generateReview() {
+
+  const useCustom = myCustomReviews.length > 0 && Math.random() < 0.5;
+
+  if (useCustom) {
+    const randomCustom =
+      myCustomReviews[Math.floor(Math.random() * myCustomReviews.length)];
+    document.getElementById("reviewText").innerText = randomCustom;
+  } else {
+
+    const numSentences = Math.floor(Math.random() * 4) + 2;
+    const reviewType = Math.random();
+
+    let pool = [];
+
+    if (reviewType < 0.4) {
+      pool = [...environmentComments, ...devServices, ...businessImpact];
+    } else if (reviewType < 0.8) {
+      pool = [...hinglishEnv, ...hinglishDev, ...hinglishImpact];
+    } else {
+      pool = [
+        ...environmentComments,
+        ...devServices,
+        ...businessImpact,
+        ...hinglishEnv,
+        ...hinglishDev,
+        ...hinglishImpact
+      ];
+    }
+
+    let selected = [];
+    for (let i = 0; i < numSentences && pool.length; i++) {
+      const idx = Math.floor(Math.random() * pool.length);
+      selected.push(pool.splice(idx, 1)[0]);
+    }
+
+    document.getElementById("reviewText").innerText = selected.join(" ");
+  }
+
+  document.getElementById("output").classList.remove("hidden");
+  document.getElementById("placeholder").classList.add("hidden");
+  document.getElementById("copyBtnText").innerText = "Copy Review";
+}
+
+function copyReview() {
+  navigator.clipboard.writeText(
+    document.getElementById("reviewText").innerText
+  );
+  document.getElementById("copyBtnText").innerText = "Copied!";
+  setTimeout(() => {
+    document.getElementById("copyBtnText").innerText = "Copy Review";
+  }, 2000);
+}
+</script>
+
+</body>
+</html>
